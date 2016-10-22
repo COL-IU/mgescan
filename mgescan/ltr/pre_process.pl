@@ -90,16 +90,16 @@ if (length($rm_dir)>0){
 	call_remove_ltr_and_short_rm_result($rm_dir);
 	call_mask_repeat($genome_dir, $rm_dir, $ltr_genome_dir);
 }else{
-	move ($genome_dir, $ltr_genome_dir);
-	mkdir $genome_dir, 0755;
+	#move ($genome_dir, $ltr_genome_dir);
+	mkdir $ltr_genome_dir, 0755;
 	#system("for file in `ls ".$ltr_genome_dir."`; do ln -s ".$ltr_genome_dir."/\$file ".$genome_dir."; done");
 	my @gfiles;
 	my $gfile;
 	my $gfilename;
-	@gfiles = <$ltr_genome_dir/*>;
+	@gfiles = <$genome_dir/*>;
 	foreach $gfile (@gfiles) {
 		$gfilename = basename($gfile);
-		symlink($gfile, $genome_dir."/".$gfilename);
+		symlink($gfile, $ltr_genome_dir."/".$gfilename);
 	}
 }
 

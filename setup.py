@@ -60,7 +60,7 @@ setup(
         license = "GPLv3",
         keywords = "MGEScan, Galaxy workflow",
         url = "https://github.com/MGEScan/mgescan",
-        packages = ['mgescan'],
+        packages = ['mgescan','mgescan.dna'],
         install_requires = reqs,
         long_description = read('README.md'),
         classifiers=[

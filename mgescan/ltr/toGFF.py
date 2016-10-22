@@ -19,7 +19,7 @@ infile = open(sys.argv[1], "r")
 outfile = open(sys.argv[2], "w")
 cluster = ""
 #print >>outfile, "##gff-version 3"
-print >>outfile, "track name=LTR description=\"MGEScan-LTR\" color=0,0,255,"
+#print >>outfile, "track name=LTR description=\"MGEScan-LTR\" color=0,0,255,"
 
 for aline in infile:
     aline = aline.strip()
@@ -34,15 +34,15 @@ for aline in infile:
         # remove file extension .fa
         seqid = seqid.replace(".fa", "")
         #if seqid[0].isdigit():
-        if seqid[:3] != "chr":
-            seqid = "chr" + seqid
+        #if seqid[:3] != "chr":
+        #    seqid = "chr" + seqid
         searchObj=re.search(r'([^.]*).([^.]*).([^.]*).([^.]*).([^.]*).fa(.*)',
                 words[0], re.M|re.I)
         try:
             if len(searchObj.groups()) > 5 and searchObj.group(5) != "":
                 seqid = searchObj.group(5)
                 if searchObj.group(4) == "chromosome":
-                    seqid = "chr" + seqid
+                    seqid = seqid
         except:
             pass
         # id is cluster + seqid

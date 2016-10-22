@@ -35,7 +35,7 @@ def readFASTA(filename):
 
 outfile = open(sys.argv[2], "w")
 #print >>outfile, "##gff-version 3"
-print >>outfile, "track name=nonLTR description=\"MGEScan-nonLTR\" color=255,0,0"
+#print >>outfile, "track name=nonLTR description=\"MGEScan-nonLTR\" color=255,0,0"
 
 # Example ltr.out
 
