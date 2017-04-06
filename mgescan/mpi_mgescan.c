@@ -22,7 +22,7 @@ void _readdir(const char *path, char **flist_p, int *nfiles_p) {
 		int nfiles = 0;
 
 		while ((ent = readdir (dir)) != NULL) {
-			if (strcmp(ent->d_name, ".") == 0 || (strcmp(ent->d_name, "..") == 0) || ent->d_type != 0x8)
+			if (strcmp(ent->d_name, ".") == 0 || (strcmp(ent->d_name, "..") == 0) || (ent->d_type != DT_REG && ent->d_type != DT_LNK) )
 				continue;
 			strcpy(flist + (NAME_MAX * nfiles), ent->d_name);
 			nfiles++;
