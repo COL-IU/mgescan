@@ -155,7 +155,7 @@ class MGEScan(object):
 		runDNA(self.genome_dir,self.data_dir,self.base_path)
 		
 		end = time.time()
-		print ('ltr: finishing (elapsed time: {0} secs)'.format(int(round(end -
+		print ('dna: finishing (elapsed time: {0} secs)'.format(int(round(end -
 			start))))
 
 	def ltr(self):
