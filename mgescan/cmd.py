@@ -1,7 +1,10 @@
 """MGEScan: identifying ltr and non-ltr in genome sequences
 
 Usage:
-	mgescan <genome_dir> [--output=<data_dir>] [--mpi=<num>] [--debug]
+	mgescan all <genome_dir> [--output=<data_dir>] [--mpi=<num>] [--debug]
+	mgescan ltr <genome_dir> [--output=<data_dir>] [--mpi=<num>] [--debug]
+	mgescan nonltr <genome_dir> [--output=<data_dir>] [--mpi=<num>] [--debug]
+	mgescan dna <genome_dir> [--output=<data_dir>] [--mpi=<num>] [--debug]
 	mgescan (-h | --help)
 	mgescan --version
 
@@ -18,6 +21,7 @@ from multiprocessing import Process
 from subprocess import check_call, Popen, PIPE
 from mgescan import utils
 from mgescan.split import Split
+from mgescan.combineGFFs import CombineGFFs
 from mgescan.dna.predictor import *
 import shutil
 import time
@@ -30,8 +34,10 @@ class MGEScan(object):
 	default_output_path = "./output"
 	genome_dir = None
 	data_dir = None
-	#ltr_enabled = False
-	#nonltr_enabled = False
+	all_enabled = False
+	ltr_enabled = False
+	nonltr_enabled = False
+	dna_enabled = False
 	debug = False
 
 	args = None
@@ -53,11 +59,13 @@ class MGEScan(object):
 	def set_inputs(self):
 		self.data_dir = utils.get_abspath(self.args['--output'])
 		self.genome_dir = utils.get_abspath(self.args['<genome_dir>'])
-		#self.ltr_enabled = self.args['ltr']
-		#self.nonltr_enabled = self.args['nonltr']
+		self.all_enabled = self.args['all']
+		self.ltr_enabled = self.args['ltr']
+		self.nonltr_enabled = self.args['nonltr']
+		self.dna_enabled = self.args['dna']
 		self.mpi_enabled = self.args['--mpi']
-		if(self.mpi_enabled):
-			self.mpi_enabled = str(int(math.ceil(1.0*int(self.args['--mpi'])/2)))
+		#if(self.mpi_enabled):
+		#	self.mpi_enabled = str(int(math.ceil(1.0*int(self.args['--mpi'])/2)))
 		self.debug = self.args['--debug']
 
 	def set_defaults(self):
@@ -126,25 +134,38 @@ class MGEScan(object):
 		new_genome_dir = split.set_output(self.genome_dir + "/divided-genome")
 		split.split_files()
 		self.genome_dir =  new_genome_dir
-		
+
+	def wrapper_combineGFFs(self):
+		combineInst = CombineGFFs()
+		combineInst.set_datadir(self.data_dir)
+		combineInst.combine()
 		
 	def run(self):
 		# split a large file
 		self.wrapper_split_files()
 		
-		p1 = Process(target=self.ltr)
-		p1.start()
-		p2 = Process(target=self.nonltr)
-		p2.start()
+		if self.ltr_enabled or self.all_enabled:
+			p1 = Process(target=self.ltr)
+			p1.start()
+		if self.nonltr_enabled or self.all_enabled:
+			p2 = Process(target=self.nonltr)
+			p2.start()
 		if 'p1' in locals():
 			p1.join()
 		if 'p2' in locals():
 			p2.join()
 		
-		p3 = Process(target=self.dna)
-		p3.start()
-		if 'p3' in locals():
+		if self.dna_enabled or self.all_enabled:
+			if (not os.path.isfile(self.data_dir+"/ltr/ltr.gff3")) and (not self.ltr_enabled) and (not self.all_enabled):
+				p1 = Process(target=self.ltr)
+				p1.start()
+				p1.join()
+			p3 = Process(target=self.dna)
+			p3.start()
 			p3.join()
+
+		self.wrapper_combineGFFs()
+
 		# remove splitted files
 		shutil.rmtree(self.genome_dir)
 		
@@ -233,10 +254,8 @@ class MGEScan(object):
 		#std_msgs = p.communicate()
 		try:
 			retcode = check_call(cmd.split())
-			if retcode < 0:
+			if retcode != 0:
 				print >>sys.stderr, "%s was terminated by signal" % cmd, -retcode
-			else:
-				print >>sys.stderr, "Returned", retcode
 		except OSError as e:
 			print >>sys.stderr, "Failed:", e
 		return retcode

@@ -10,7 +10,7 @@
 	<requirement type="package" version="3.1b1">hmmer</requirement>
 	</requirements>
 	<command interpreter="bash">
-		mgescan.sh $input '$input.name' 3 $output L None None None $ltr_gff3 None None $sw_rm "$scaffold" $min_dist $max_dist $min_len_ltr $max_len_ltr $ltr_sim_condition $cluster_sim_condition $len_condition $repeatmasker
+		mgescan.sh $input '$input.name' 3 $ltrout L None None None None $ltr_gff3 None None None $sw_rm "$scaffold" $min_dist $max_dist $min_len_ltr $max_len_ltr $ltr_sim_condition $cluster_sim_condition $len_condition $repeatmasker
 	</command>
 	<inputs>
 		<param format="fasta" name="input" type="data" label="From"/>
@@ -29,7 +29,7 @@
 		<param name="len_condition" type="text" value="70" label="minimum length(bp) for LTRs aligned in local alignment"/>
 	</inputs>
 	<outputs>
-		<data format="ltr.out" name="output" />
+		<data format="ltr.out" name="ltrout" />
 		<data format="gff3" name="ltr_gff3" />
 		<data format="repeatmasker" name="repeatmasker" >
 			<filter>sw_rm == "Yes"</filter>

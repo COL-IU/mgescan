@@ -197,11 +197,11 @@ cluster_family($sim_file, $family_file, $ltr, $ltr_data_dir);
 #------------------------------------------------------------------------------------------
 select_putative_family($family_file, $family_selected_file);
 
-system("rm -rf ".$genome_dir);
-system("rm -rf ".$ir_seq_dir);
-system("rm -rf ".$ltr_seq_dir);
-system("rm -rf ".$ltr_data_dir);
-system("rm -rf ".$sim_file);
+#system("rm -rf ".$genome_dir);
+#system("rm -rf ".$ir_seq_dir);
+#system("rm -rf ".$ltr_seq_dir);
+#system("rm -rf ".$ltr_data_dir);
+#system("rm -rf ".$sim_file);
 
 #####################################################
 # SUB

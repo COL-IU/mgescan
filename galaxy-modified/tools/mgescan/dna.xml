@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<tool name="MGEScan-DNA" id="mgescan-dna" version="3.0.0">
+	<description>
+		de novo identification of DNA Transposons
+	</description>
+	<requirements>
+	<requirement type="package" version="3.0.0">mgescan</requirement>
+	<requirement type="package" version="4.0">tandem_repeats_finder</requirement>
+	<requirement type="package" version="5.0.0">emboss</requirement>
+	<requirement type="package" version="3.1b1">hmmer</requirement>
+	</requirements>
+	<command interpreter="bash">
+		mgescan.sh $input '$input.name' 3 None D None None None $dnaout None None $dna_gff3
+	</command>
+	<inputs>
+		<param format="fasta" name="input" type="data" label="From"/>
+	</inputs>
+	<outputs>
+		<data format="dna.out" name="dnaout" />
+		<data format="gff3" name="dna_gff3" />
+	</outputs>
+	<help>
+Running the program
+===================
+	</help>
+</tool>

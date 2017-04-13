@@ -319,7 +319,7 @@ def runDNA(indir,outdir,basepath):
     filteredGenesList.append(predGene)
   filteredGenesDict[header] = filteredGenesList
   
- o3 = file(dnaoutdir+"final.out","w")
+ o3 = file(dnaoutdir+"dna.out","w")
  for header in filteredGenesDict.keys():
   o3.write(">"+header+"\n")
   filteredGenesList = filteredGenesDict[header]
@@ -327,33 +327,18 @@ def runDNA(indir,outdir,basepath):
    o3.write(filteredGene.info)
  o3.close()
  
- o4 = file(outdir+"mge.gff3","w")
- ###### Process GFFs ######
- nonltrs = readGFF3(outdir+"info/nonltr.gff3",None)
+ o4 = file(dnaoutdir+"dna.gff3","w")
+ ###### Make GFF ######
  for header in seqDict.keys():
-  if header in ltrs.keys():
-   ltrList = ltrs[header][1]
-  else:
-   ltrList = []
-  if header in nonltrs.keys():
-   nonltrList = nonltrs[header][1]
-  else:
-   nonltrList = []
-  ltrList.extend(nonltrList)
   dnaList = filteredGenesDict[header]
   for dnaItem in dnaList:
    words = dnaItem.info.split(None)
    id = header + "_" + words[0]
    name = words[3]
-   dnaItem.info = "\t".join([header, "MGEScan_DNA", "mobile_genetic_element", str(dnaItem.start), str(dnaItem.end), ".", ".", ".", "ID=" + id + ";name="+name])
-   ltrList.append(dnaItem)
-  
-  sortedList = sorted(ltrList,key=lambda x: x.start)
-  for item in sortedList:
-   o4.write(item.info + "\n")
+   outstr = "\t".join([header, "MGEScan_DNA", "mobile_genetic_element", str(dnaItem.start), str(dnaItem.end), ".", ".", ".", "ID=" + id + ";name="+name])
+   o4.write(outstr + "\n")
    
  o4.close()
-   
  
  removeDir(tempdir)
 

@@ -11,7 +11,7 @@
 	</requirements>
 	<version_command>mgescan --version</version_command>
 	<command interpreter="bash">
-		mgescan.sh $input '$input.name' 3 $output $program $clade $qvalue_en $qvalue_rt $ltr_gff3 $nonltr_gff3 $both_gff3 $mpi_yn.nmpi
+		mgescan.sh $input '$input.name' 3 $ltrout $program $clade $qvalue_en $qvalue_rt $dnaout $ltr_gff3 $nonltr_gff3 $dna_gff3 $all_gff3 $mpi_yn.nmpi
 		<!-- mgescan.sh $input $input.name $hmmver $output $program $clade $qvalue_en $qvalue_rt $ltr_gff3 $nonltr_gff3 -->
 	</command>
 	<inputs>
@@ -21,9 +21,10 @@
 			<option value="2">2</option>
 		</param-->
 		<param name="program" type="select" label="MGEScan">
-			<option selected="selected" value="B">Both</option>
+			<option selected="selected" value="A">All</option>
 			<option value="L">LTR</option>
 			<option value="N">nonLTR</option>
+			<option value="D">DNA</option>
 		</param>
 		<conditional name="mpi_yn">
 			<param name="mpi_select" type="select" label="Enable MPI">
@@ -39,26 +40,32 @@
 		</conditional>
 	</inputs>
 	<outputs>
-		<data format="ltr.out" name="output" label="LTR Results (ltr.out)">
-			<filter>program != "N"</filter>
+		<data format="ltr.out" name="ltrout" label="LTR Results (ltr.out)">
+			<filter>program == "L" or program == "A"</filter>
 		</data>
 		<data format="fasta" name="clade" label="clade file (FASTA)">
-			<filter>program != "L"</filter>
+			<filter>program == "N" or program == "A"</filter>
 		</data>
 		<data format="qfile" name="qvalue_en" label="qvalue_en">
-			<filter>program != "L"</filter>
+			<filter>program == "N" or program == "A"</filter>
 		</data>
 		<data format="qfile" name="qvalue_rt" label="qvalue_rt">
-			<filter>program != "L"</filter>
+			<filter>program == "N" or program == "A"</filter>
 		</data>
+		<data format="dna.out" name="dnaout" label="DNA Results (dna.out)">
+      <filter>program == "D" or program == "A"</filter>
+    </data>
 		<data format="gff3" name="ltr_gff3" label="GFF3 for LTR">
-			<filter>program != "N"</filter>
+			<filter>program == "L" or program == "A"</filter>
 		</data>
 		<data format="gff3" name="nonltr_gff3" label="GFF3 for nonLTR">
-			<filter>program != "L"</filter>
+			<filter>program == "N" or program == "A"</filter>
 		</data>
-		<data format="gff3" name="both_gff3" label="GFF3 for LTR and nonLTR">
-			<filter>program == "B"</filter>
+		<data format="gff3" name="dna_gff3" label="GFF3 for DNA">
+      <filter>program == "D" or program == "A"</filter>
+    </data>
+		<data format="gff3" name="all_gff3" label="GFF3 for LTR, nonLTR and DNA">
+			<filter>program == "A"</filter>
 		</data>
 
 	</outputs>

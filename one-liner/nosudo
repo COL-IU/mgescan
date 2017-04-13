@@ -1,0 +1,34 @@
+MGESCAN_DEV=/home/data1/groups/heewlee/MA/wazim/softwares/mgescan
+
+cat <<EOF > $HOME/.mgescanrc
+export MGESCAN_HOME=/home/data1/groups/heewlee/MA/wazim/softwares/mgescan3
+export MGESCAN_SRC=\$MGESCAN_HOME/src
+export GALAXY_HOME=\$MGESCAN_HOME/galaxy
+export TRF_HOME=\$MGESCAN_HOME/trf
+export RM_HOME=\$MGESCAN_HOME/RepeatMasker
+export MGESCAN_VENV=\$MGESCAN_HOME/virtualenv/mgescan
+export GALAXY_VIRTUAL_ENV=\$MGESCAN_HOME/virtualenv/mgescan
+EOF
+#echo "source ~/.mgescanrc" >> $HOME/.bash_profile
+source ~/.mgescanrc
+
+mkdir $MGESCAN_HOME
+cd $MGESCAN_HOME
+git clone https://github.com/galaxyproject/galaxy/
+
+mkdir -p $MGESCAN_VENV
+virtualenv $MGESCAN_VENV
+source $MGESCAN_VENV/bin/activate
+
+mkdir -p $TRF_HOME
+cp -p /home/data1/groups/heewlee/MA/wazim/softwares/trf407b.linux64 $TRF_HOME
+
+mkdir -p $MGESCAN_SRC
+cp -pr $MGESCAN_DEV/* $MGESCAN_SRC
+
+cd $MGESCAN_SRC
+python setup.py install
+
+cp -pr $MGESCAN_SRC/galaxy-modified/* $GALAXY_HOME
+ln -sf $TRF_HOME/trf407b.linux64 $MGESCAN_VENV/bin/trf
+chmod 700 $MGESCAN_VENV/bin/trf

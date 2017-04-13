@@ -1,10 +1,13 @@
 #!/bin/bash
-# mgescan.sh $input $input.name 3 $output L None None None $ltr_gff3 None None $sw_rm "$scaffold" $min_dist $max_dist $min_len_ltr $max_len_ltr $ltr_sim_condition $cluster_sim_condition $len_condition $repeatmasker
-if [ "" == "$MGESCAN_SRC" ]
+# mgescan.sh $input $input.name 3 $ltrout L None None None None $ltr_gff3 None None None $sw_rm "$scaffold" $min_dist $max_dist $min_len_ltr $max_len_ltr $ltr_sim_condition $cluster_sim_condition $len_condition $repeatmasker
+if [ ! -f ~/.mgescanrc ]
 then
-	echo "\$MGESCAN_SRC is not defined."
-	exit 2
+  ".mgescanrc is not found."
+  exit
 fi
+. ~/.mgescanrc
+user_dir=$MGESCAN_HOME
+source $MGESCAN_VENV/bin/activate >> /dev/null
 
 script_program=`which python`
 script=$MGESCAN_SRC/mgescan/cmd.py
@@ -12,34 +15,36 @@ input_file=$1
 #input_file_name=$2
 input_file_name=`basename $input_file`
 hmmsearch_version=$3
-output_file=$4
-program=$5 # N is nonLTR, L is LTR and B is both
+ltrout=$4
+program=$5 # N is nonLTR, L is LTR, D is DNA and A is all
 # Optional output parameters for nonLTR
 clade=$6
 en=$7
 rt=$8
-ltr_gff3=$9
-nonltr_gff3=${10}
-both_gff3=${11}
-#### for ltr between $11 and $20
+dnaout=$9
+ltr_gff3=${10}
+nonltr_gff3=${11}
+dna_gff3=${12}
+all_gff3=${13}
+#### for ltr between $14 and $23
 if [ "$program" == "L" ]
 then
-	sw_rm=${12}
-	scaffold=${13}
-	min_dist=${14}
-	max_dist=${15}
-	min_len_ltr=${16}
-	max_len_ltr=${17}
-	ltr_sim_condition=${18}
-	cluster_sim_condition=${19}
-	len_condition=${20}
-	repeatmasker=${21}
+	sw_rm=${14}
+	scaffold=${15}
+	min_dist=${16}
+	max_dist=${17}
+	min_len_ltr=${18}
+	max_len_ltr=${19}
+	ltr_sim_condition=${20}
+	cluster_sim_condition=${21}
+	len_condition=${22}
+	repeatmasker=${23}
 fi
 
 #elif [ "$program" == "B" ]
-if [ $# -eq 12 ]
+if [ $# -eq 14 ]
 then
-	nmpi=${12}
+	nmpi=${14}
 	if [ ! -z $nmpi ] && [ $nmpi -ge 1 ]
 	then
 		mpi_enabled="--mpi=$nmpi"
@@ -107,8 +112,11 @@ then
 elif [ "$program" == "N" ]
 then
 	program_name="nonltr"
+elif [ "$program" == "D" ]
+then
+	program_name="dna"
 else
-	program_name="both"
+	program_name="all"
 fi
 
 #run
@@ -118,9 +126,17 @@ $script_program $script $program_name $input_dir/ --output=$output_dir/ $mpi_ena
 #RES=`ssh -i $user_dir/.ssh/.internal silo.cs.indiana.edu "/usr/bin/perl $script -genome=$input_dir/ -data=$output_dir/ -hmmerv=$hmmsearch_version -program=$program > /dev/null"`
 
 #make a copy of output
-if [ "$program" != "N" ]
+if [[ $program == "D" || $program == "A" ]]
 then
-	/bin/cp $output_dir/ltr/ltr.out $output_file
+  /bin/cp $output_dir/dna/dna.out $dnaout
+  if [ "$dna_gff3" != "None" ]
+  then
+    /bin/cp $output_dir/dna/dna.gff3 $dna_gff3
+  fi
+fi
+if [[ $program == "L" || $program == "A" ]]
+then
+	/bin/cp $output_dir/ltr/ltr.out $ltrout
 	if [ "$ltr_gff3" != "None" ]
 	then
 		/bin/cp $output_dir/ltr/ltr.gff3 $ltr_gff3
@@ -132,7 +148,7 @@ then
 		/bin/cp $output_dir/repeatmasker/${input_file_name}.out $repeatmasker
 	fi
 fi
-if [ "$program" != "L" ]
+if [[ $program == "N" || $program == "A" ]]
 then
 
 	tmp=`mktemp`
@@ -162,12 +178,13 @@ then
 	#/bin/cp $compressed_file $output_file
 fi
 
-if [ "$program" == "B" ]
+if [ "$program" == "A" ]
 then
+	/bin/cp $output_dir/mge.gff3 $all_gff3
 	#echo "track name=LTR description=\"MGEScan-LTR\" color=0,0,255," > $both_gff3
-	/bin/cat $output_dir/ltr/ltr.gff3 >> $both_gff3
+	#/bin/cat $output_dir/ltr/ltr.gff3 >> $both_gff3
 	#echo "track name=nonLTR description=\"MGEScan-nonLTR\" color=255,0,0" >> $both_gff3
-	/bin/cat $output_dir/info/nonltr.gff3 >> $both_gff3
+	#/bin/cat $output_dir/info/nonltr.gff3 >> $both_gff3
 fi
 
 # delete temp directory
