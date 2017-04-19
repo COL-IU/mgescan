@@ -287,13 +287,15 @@ def runDNA(indir,outdir,basepath):
    for i in range(0,len(group)):
     [totalScore,a,b,c,d,e,f,myScore,hmmScore,tirScore1,tirScore2,hmmName,hmmPercent,ievalue,acc] = group[i]
     #tirLen = b-a+1
+    elementLength = f-a+1
     outString = myljust(a,12) + myljust(f,12) + "+  " + myljust(hmmName,11) + myljust(1,6) + myljust(b-a+1,8) + myljust(c-a+1,8) + myljust(d-a+1,8) + myljust(e-a+1,8) + myljust(f-a+1,8) + myljust(hmmScore,8) + myljust(tirScore1,8) + myljust(tirScore2,8) + "\n"
-    if i == 0:
-     o1.write(outString)
-     gene = Gene(int(a),int(f),0,0,"")
-     gene.info = outString
-     predGenesList.append(gene)
-    o2.write(outString)
+    if elementLength > 300:
+     if i == 0:
+      o1.write(outString)
+      gene = Gene(int(a),int(f),0,0,"")
+      gene.info = outString
+      predGenesList.append(gene)
+     o2.write(outString)
   predGenesDict[header] = predGenesList
 
  o1.close()
