@@ -3,12 +3,27 @@ import sys
 import time
 import subprocess as sub
 from setuptools import setup
-from setuptools.command.bdist_egg import bdist_egg 
+from setuptools.command.bdist_egg import bdist_egg
 def cmd_exists(cmd):
     return sub.call(["which", cmd], stdout=sub.PIPE, stderr=sub.PIPE) == 0
 
 class MGEScanInstall(bdist_egg):
     def run(self):
+        if not cmd_exists("hmmsearch"):
+            print ("Prerequisite software: HMMER is not installed.")
+            print ("Please install HMMER v3.1b1 and re-run this setup.")
+            print ("Exiting without installation.")
+            sys.exit()
+        if not cmd_exists("transeq"):
+            print ("Prerequisite software: EMBOSS is not installed.")
+            print ("Please install EMBOSS v6.6.0 and re-run this setup.")
+            print ("Exiting without installation.")
+            sys.exit()
+        if not cmd_exists("trf"):
+            print ("Prerequisite software: Tandem Repeats Finder is not installed.")
+            print ("Please install Tandem Repeats Finder v407b and re-run this setup.")
+            print ("Exiting without installation.")
+            sys.exit()
         if cmd_exists("make") and cmd_exists('gcc') and cmd_exists('g++'):
             os.system("cd mgescan/ltr/MER; make clean; make")
             os.system("cd mgescan/nonltr/; make clean; make translate")
@@ -22,23 +37,31 @@ class MGEScanInstall(bdist_egg):
             print ("[Warning] mpicc does not exist. Compile mpi code is"\
                     + " skipped")
             time.sleep(3)
+
+        install_path = ""
         if not os.environ.get('MGESCAN_HOME'):
-             print ("$MGESCAN_HOME is not defined where MGESCAN will be" + \
-                     " installed.")
-             def_home = raw_input("Would you install MGESCAN at " + \
-                     os.environ.get("HOME") + "/mgescan3 (Y/n)?")
-             if def_home.lower() == 'n':
-                 print ("Run 'export MGESCAN_HOME=<your desired destination" + \
-                         " path to install>' if you want to install somewhere"+\
-                         " else\n")
-                 sys.exit()
-             os.environ['MGESCAN_HOME'] = os.environ.get('HOME') + "/mgescan3"
-        if os.environ.get('MGESCAN_HOME') and not os.environ.get("MGESCAN_SRC"):
-            os.environ['MGESCAN_SRC'] = os.environ.get('MGESCAN_HOME') + "/src"
-            if not os.path.exists(os.environ.get("MGESCAN_SRC")):
-                os.makedirs(os.environ.get("MGESCAN_SRC"), 0755)
-        if os.environ.get("MGESCAN_SRC"):
-            os.system("cp -pr * $MGESCAN_SRC")
+            print ("$MGESCAN_HOME is not defined where MGESCAN will be" + \
+                    " installed.")
+            def_home = raw_input("Would you like to install MGEScan at " + \
+                    os.environ.get("HOME") + "/mgescan4 (Y/n)?")
+            if def_home.lower() == 'n':
+                print ("Run 'export MGESCAN_HOME=<your desired destination" + \
+                        " path to install>' if you want to install somewhere"+\
+                        " else\n")
+                sys.exit()
+            install_path = os.environ.get('HOME') + "/mgescan4"
+        else:
+            print ("Installing MGEScan in "+os.environ.get('MGESCAN_HOME')+" (MGESCAN_HOME)")
+            install_path = os.environ.get('MGESCAN_HOME')
+
+        if not os.path.exists(install_path):
+            os.makedirs(install_path, 0755)
+        else:
+            print ("It looks like a previous installation of MGEScan already exists in "+install_path)
+            print ("Please remove the previous installation and re-run this setup.")
+            sys.exit()
+
+        os.system("cp -pr * "+install_path)
 
         bdist_egg.run(self)
 
@@ -52,14 +75,14 @@ def read(fname):
 reqs = [line.strip() for line in open('requirements.txt')]
 setup(
         name = "MGEScan",
-        version = "3.0.0",
-        author = "Hyungro Lee",
-        author_email = "hroe.lee@gmail.com",
-        description = ("MGEScan on Galaxy Workflow System for identifying ltr and "
-            "non-ltr in genome sequences"),
+        version = "4.0.0",
+        author = "Wazim Mohammed Ismail",
+        author_email = "wazimoha@indiana.edu",
+        description = ("MGEScan on Galaxy Workflow System for identifying transposable "
+            "elements in genome sequences"),
         license = "GPLv3",
         keywords = "MGEScan, Galaxy workflow",
-        url = "https://github.com/MGEScan/mgescan",
+        url = "https://github.com/COL-IU/mgescan",
         packages = ['mgescan','mgescan.dna'],
         install_requires = reqs,
         long_description = read('README.md'),

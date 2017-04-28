@@ -39,7 +39,11 @@ class nonLTR(object):
         self.run_post2_cmd = self.base_path + "nonltr/" + "post_process2.pl"
 
     def get_env(self):
-        self.base_path = os.environ.get("MGESCAN_SRC") + "/mgescan/"
+        if not os.environ.get("MGESCAN_HOME"):
+            self.mgescan_home = os.environ.get("HOME")+"/mgescan4"
+        else:
+            self.mgescan_home = os.environ.get("MGESCAN_HOME")
+        self.base_path = self.mgescan_home + "/mgescan/"
         self.hmmerv = os.environ.get("MGESCAN_HMMER_VERSION") or self.hmmerv
 
     def set_param(self):
@@ -59,7 +63,7 @@ class nonLTR(object):
         self.p_mpi_option = self.p_hf_option + " -mca btl ^openib"
 
     def read_mpi_host_file(self):
-        fname = os.environ.get("MGESCAN_SRC") + "host_file"
+        fname = self.mgescan_home + "host_file"
         if os.path.isfile(fname):
             self.p_hf_option = "-hostfile " + fname
         self.p_hf_option = ""
