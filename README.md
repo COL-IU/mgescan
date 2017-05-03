@@ -1,115 +1,36 @@
-MGEScan on Galaxy Scientific Workflow
+MGEScan
 ===============================================================================
 
-A Galaxy based system for identifying retrotransposons in genome
+A probabilistic approach for *de novo* identification and classification of mobile genetic elements in eukaryotic genomes. 
 
-![mgescan workflow](https://raw.githubusercontent.com/MGEScan/mgescan/master/docs/source/images/rtm-workflow-final.png)
-
-**DEMO Version : [silo.cs.indiana.edu:38080](http://silo.cs.indiana.edu:38080/)**
-
-* [Tutorial](http://mgescan.readthedocs.org/en/latest/tutorial.html)
-* [Documentation](http://mgescan.readthedocs.org/en/latest/index.html)
-* [Source](https://github.com/MGEScan/mgescan/)
-* [Home Page](http://mgescan.github.io/mgescan/)
-
-Prerequisite
+Prerequisites
 -------------------------------------------------------------------------------
 
-### Python
+* git v2.0.0
+* python v2.7.13
+* virtualenv v15.1.0
+* HMMER v3.1b1
+* EMBOSS v6.6.0
+* Tandem Repeats Finder v4.07b
+* NCBI BLAST+ v2.2.28
 
-* git
-* virtualenv
-* python-dev
+Optional Prerequisites
+-------------------------------------------------------------------------------
 
-```sh
-sudo apt-get update
-sudo apt-get install python-virtualenv -y
-sudo apt-get install git -y
-sudo apt-get install python-dev -y
-```
+* Galaxy v17.01 (If you intend to use Galaxy platform to run MGEScan)
+* RepeatMasker v4.0.5 (If you indend to use RepeatMasker in the preprocessing step of MGEScan-LTR)
 
-#### Virtualenv
-
-
-```sh
-mkdir ~/virtualenv
-virtualenv ~/virtualenv/mgescan
-source ~/virtualenv/mgescan/bin/activate
-echo "source ~/virtualenv/mgescan/bin/activate" >> ~/.bash_profile
-```
-
-### Tools
-
-* Galaxy
-* HMMER
-* EMBOSS
-* trf (Tandem Repeats Finder)
-
-#### Galaxy
-```sh
-cd ~/
-git clone https://github.com/galaxyproject/galaxy/
-```
-
-#### HMMER and EMBOSS
-
-*Ubuntu*
-
-```sh
-sudo apt-get install hmmer -y
-sudo apt-get install emboss -y
-```
-
-#### trf
-
-```sh
-wget http://tandem.bu.edu/trf/downloads/trf407b.linux64
-mv trf407b.linux64 ~/virtualenv/mgescan/bin/trf
-chmod 700 ~/virtualenv/mgescan/bin/trf
-```
-
-#### RepeatMasker
-
-```sh
-cd ~
-wget http://www.repeatmasker.org/RepeatMasker-open-4-0-5.tar.gz
-tar xvzf RepeatMasker-open-4-0-5.tar.gz
-```
-
-.. note:: Find the latest at: http://www.repeatmasker.org/RMDownload.html
 
 Installation
 -------------------------------------------------------------------------------
 
 ```sh
-git clone https://github.com/MGEScan/mgescan.git
+git clone https://github.com/COL-IU/mgescan.git
 cd mgescan
+virtualenv .venv
+source .venv/bin/activate
 python setup.py install
 ```
-
-### virtualenv (optional for individual without sudo)
-
-
-```sh
-virtualenv ~/virtualenv/mgescan
-source ~/virtualenv/mgescan/bin/activate
-```
-
-### Galaxy modification
-
-```sh
-cd ~/
-cp -pr ~/mgescan/galaxy-modified/* ~/galaxy
-```
-
-### Start Galaxy
-```sh
-cd ~/galaxy
-./run.sh &
-```
-
-Default port number : **38080**
-http://[IP ADDRESS]:38080
 
 Command Line Tool (mgescan)
 -------------------------------------------------------------------------------
@@ -122,13 +43,6 @@ Usage:
     mgescan (-h | --help)
     mgescan --version
 ```
-
-Amazon Cloud Image (EC2)
--------------------------------------------------------------------------------
-
-* US East Region Only
-* MGEScan - ami-394ebd52 (latest version)
-* retrotminer-alpha - ami-23d9c74a (created at 2014)
 
 Citation
 -------------------------------------------------------------------------------
