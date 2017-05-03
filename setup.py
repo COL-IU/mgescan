@@ -9,34 +9,25 @@ def cmd_exists(cmd):
 
 class MGEScanInstall(bdist_egg):
     def run(self):
-        if not cmd_exists("hmmsearch"):
-            print ("Prerequisite software: HMMER is not installed.")
-            print ("Please install HMMER v3.1b1 and re-run this setup.")
-            print ("Exiting without installation.")
+
+        hmmer_exists = cmd_exists("hmmsearch")
+        emboss_exists = cmd_exists("transeq")
+        trf_exists = cmd_exists("trf")
+        blast_exists = cmd_exists("blastn")
+        if not (hmmer_exists and emboss_exists and trf_exists and blast_exists):
+            print ("[Error] Prerequisite software(s):")
+            if not hmmer_exists:
+                print ("\t- HMMER v3.1b1")
+            if not emboss_exists:
+                print ("\t- EMBOSS v6.6.0")
+            if not trf_exists:
+                print ("\t- Tandem Repeats Finder v407b")
+            if not blast_exists:
+                print ("\t- NCBI-BLAST 2.2.28+")
+            print ("\tare not installed!")
+            print ("Please install the above software and re-run this setup.")
+            print ("Exiting without installation!")
             sys.exit()
-        if not cmd_exists("transeq"):
-            print ("Prerequisite software: EMBOSS is not installed.")
-            print ("Please install EMBOSS v6.6.0 and re-run this setup.")
-            print ("Exiting without installation.")
-            sys.exit()
-        if not cmd_exists("trf"):
-            print ("Prerequisite software: Tandem Repeats Finder is not installed.")
-            print ("Please install Tandem Repeats Finder v407b and re-run this setup.")
-            print ("Exiting without installation.")
-            sys.exit()
-        if cmd_exists("make") and cmd_exists('gcc') and cmd_exists('g++'):
-            os.system("cd mgescan/ltr/MER; make clean; make")
-            os.system("cd mgescan/nonltr/; make clean; make translate")
-            os.system("cd mgescan/nonltr/hmm;make clean; make")
-        else:
-            print ("[Warning] make|gcc|g++ does not exist. Compile code is skipped")
-            time.sleep(3)
-        if cmd_exists("mpicc"):
-            os.system("cd mgescan;mpicc mpi_mgescan.c -o mpi_mgescan")
-        else:
-            print ("[Warning] mpicc does not exist. Compile mpi code is"\
-                    + " skipped")
-            time.sleep(3)
 
         install_path = ""
         if not os.environ.get('MGESCAN_HOME'):
@@ -53,7 +44,6 @@ class MGEScanInstall(bdist_egg):
         else:
             print ("Installing MGEScan in "+os.environ.get('MGESCAN_HOME')+" (MGESCAN_HOME)")
             install_path = os.environ.get('MGESCAN_HOME')
-
         if not os.path.exists(install_path):
             os.makedirs(install_path, 0755)
         else:
@@ -61,7 +51,27 @@ class MGEScanInstall(bdist_egg):
             print ("Please remove the previous installation and re-run this setup.")
             sys.exit()
 
+        if cmd_exists("make") and cmd_exists('gcc') and cmd_exists('g++'):
+            os.system("cd mgescan/ltr/MER; make clean; make")
+            os.system("cd mgescan/nonltr/; make clean; make translate")
+            os.system("cd mgescan/nonltr/hmm;make clean; make")
+        else:
+            print ("[Warning] make|gcc|g++ does not exist. Compile code is skipped")
+            time.sleep(3)
+        if cmd_exists("mpicc"):
+            os.system("cd mgescan;mpicc mpi_mgescan.c -o mpi_mgescan")
+        else:
+            print ("[Warning] mpicc does not exist. Compile mpi code is"\
+                    + " skipped")
+            time.sleep(3)
+
         os.system("cp -pr * "+install_path)
+
+        if not os.environ.get('GALAXY_HOME'):
+            print ("[Warning] $GALAXY_HOME is not defined. Copying MGEScan Galaxy files is skipped.")
+            time.sleep(3)
+        else:
+            os.system("cp -pr galaxy-modified/* $GALAXY_HOME")
 
         bdist_egg.run(self)
 
