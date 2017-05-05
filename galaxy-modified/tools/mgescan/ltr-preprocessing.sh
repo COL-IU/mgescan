@@ -10,7 +10,7 @@ fi
 . ~/.mgescanrc
 user_dir=$MGESCAN_HOME
 script_program=`which perl`
-script=$MGESCAN_SRC/mgescan/ltr/pre_process.pl
+script=$MGESCAN_HOME/mgescan/ltr/pre_process.pl
 
 program_name=$1
 input_file=$2
@@ -28,7 +28,7 @@ else
 fi
 
 #move to the working directory
-work_dir=$MGESCAN_SRC/mgescan
+work_dir=$MGESCAN_HOME/mgescan
 cd $work_dir
 
 #create directory for input and output
@@ -60,7 +60,7 @@ then
 fi
 
 #run
-$script_program $script -genome=$input_dir/ -data=$output_dir/ -sw_rm=${repeatmasker_YN} -scaffold=${scaffold} 
+$script_program $script -genome=$input_dir/ -data=$output_dir/ -sw_rm=${repeatmasker_YN} -scaffold=${scaffold}
 
 #if [ "$scaffold_YN" == "Yes" ]
 #then

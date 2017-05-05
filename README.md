@@ -9,6 +9,7 @@ Prerequisites
 * git v2.0.0
 * python v2.7.13
 * virtualenv v15.1.0
+* perl v5.10.1
 * HMMER v3.1b1
 * EMBOSS v6.6.0
 * Tandem Repeats Finder v4.07b
@@ -24,11 +25,20 @@ Optional Prerequisites
 Installation
 -------------------------------------------------------------------------------
 
+###### Step 1: 
+
 ```sh
+cat <<EOF > $HOME/.mgescanrc
+export MGESCAN_HOME=$HOME/mgescan4
+EOF
+```
+
+```sh
+virtualenv ~/.venv/mgescan
+source ~/.venv/mgescan/bin/activate
+
 git clone https://github.com/COL-IU/mgescan.git
 cd mgescan
-virtualenv .venv
-source .venv/bin/activate
 python setup.py install
 ```
 

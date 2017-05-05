@@ -10,7 +10,7 @@ user_dir=$MGESCAN_HOME
 source $MGESCAN_VENV/bin/activate >> /dev/null
 
 script_program=`which python`
-script=$MGESCAN_SRC/mgescan/cmd.py
+script=$MGESCAN_HOME/mgescan/cmd.py
 input_file=$1
 #input_file_name=$2
 input_file_name=`basename $input_file`

@@ -10,6 +10,9 @@ def cmd_exists(cmd):
 class MGEScanInstall(bdist_egg):
     def run(self):
 
+        '''
+        Checking Prerequisites
+        '''
         hmmer_exists = cmd_exists("hmmsearch")
         emboss_exists = cmd_exists("transeq")
         trf_exists = cmd_exists("trf")
@@ -17,18 +20,21 @@ class MGEScanInstall(bdist_egg):
         if not (hmmer_exists and emboss_exists and trf_exists and blast_exists):
             print ("[Error] Prerequisite software(s):")
             if not hmmer_exists:
-                print ("\t- HMMER v3.1b1")
+                print ("\t- HMMER")
             if not emboss_exists:
-                print ("\t- EMBOSS v6.6.0")
+                print ("\t- EMBOSS")
             if not trf_exists:
-                print ("\t- Tandem Repeats Finder v407b")
+                print ("\t- Tandem Repeats Finder")
             if not blast_exists:
-                print ("\t- NCBI-BLAST 2.2.28+")
+                print ("\t- NCBI-BLAST+")
             print ("\tare not installed!")
             print ("Please install the above software and re-run this setup.")
             print ("Exiting without installation!")
             sys.exit()
 
+        '''
+        Checking Install Path
+        '''
         install_path = ""
         if not os.environ.get('MGESCAN_HOME'):
             print ("$MGESCAN_HOME is not defined where MGESCAN will be" + \
@@ -49,8 +55,12 @@ class MGEScanInstall(bdist_egg):
         else:
             print ("It looks like a previous installation of MGEScan already exists in "+install_path)
             print ("Please remove the previous installation and re-run this setup.")
+            print ("Exiting without installation!")
             sys.exit()
 
+        '''
+        Installing
+        '''
         if cmd_exists("make") and cmd_exists('gcc') and cmd_exists('g++'):
             os.system("cd mgescan/ltr/MER; make clean; make")
             os.system("cd mgescan/nonltr/; make clean; make translate")

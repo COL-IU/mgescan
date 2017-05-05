@@ -5,8 +5,10 @@ then
 	exit
 fi
 . ~/.mgescanrc
+
 user_dir=$MGESCAN_HOME
-source $user_dir/virtualenv/mgescan/bin/activate >> /dev/null
+source $MGESCAN_VENV/bin/activate >> /dev/null
+
 script_program=`which perl`
 script=$user_dir/mgescan/mgescan/ltr/find_ltr.pl
 input_file=$1
@@ -30,7 +32,7 @@ fi
 # $HOME/mgescan/galaxy-dist/tools/mgescan/find_ltr.sh /$HOME/mgescan/galaxy-dist/database/files/000/dataset_1.dat /$HOME/mgescan/galaxy-dist/database/files/000/dataset_3.dat
 
 #move to the working directory
-work_dir=$MGESCAN_SRC/mgescan
+work_dir=$MGESCAN_HOME/mgescan
 cd $work_dir
 #create directory for input and output
 mkdir -p input

@@ -8,16 +8,17 @@ then
 	exit
 fi
 . ~/.mgescanrc
+
 user_dir=$MGESCAN_HOME
 script_program=`which python`
-script=$MGESCAN_SRC/mgescan/ltr/toGFF.py
+script=$MGESCAN_HOME/mgescan/ltr/toGFF.py
 
 input_file=$1
 input_file_name=$2
 output_file=$3
 
 #move to the working directory
-work_dir=$MGESCAN_SRC/mgescan
+work_dir=$MGESCAN_HOME/mgescan
 cd $work_dir
 #create directory for input and output
 mkdir -p input
