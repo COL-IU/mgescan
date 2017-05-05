@@ -25,18 +25,27 @@ Optional Prerequisites
 Installation
 -------------------------------------------------------------------------------
 
-###### Step 1: 
-
+#### Step 1: Exporting the necessary environment variables
 ```sh
-cat <<EOF > $HOME/.mgescanrc
 export MGESCAN_HOME=$HOME/mgescan4
-EOF
+export MGESCAN_VENV=$HOME/venv/mgescan
+```
+Note: Instead of the paths specified above, you can provide your own paths where you would like to install MGEScan and the Python virtual environment for MGEScan. 
+
+#### Step 2 (optional - if you wish to use MGEScan tool for Galaxy): Export GALAXY_HOME environment variable so that MGEScan knows where Galaxy is installed
+```sh
+export GALAXY_HOME=$HOME/galaxy
+```
+Note: Replace the above path with the path where you've installed Galaxy. 
+
+#### Step 3: Create the Python virtual environment for MGEScan
+```sh
+virtualenv $MGESCAN_VENV
+source $MGESCAN_VENV/bin/activate
 ```
 
+#### Step 4: Install MGEScan
 ```sh
-virtualenv ~/.venv/mgescan
-source ~/.venv/mgescan/bin/activate
-
 git clone https://github.com/COL-IU/mgescan.git
 cd mgescan
 python setup.py install
@@ -47,9 +56,10 @@ Command Line Tool (mgescan)
 
 ```sh
 Usage:
-    mgescan both <genome_dir> [--output=<data_dir>] [--mpi=<num>]
+    mgescan all <genome_dir> [--output=<data_dir>] [--mpi=<num>]
     mgescan ltr <genome_dir> [--output=<data_dir>] [--mpi=<num>]
     mgescan nonltr <genome_dir> [--output=<data_dir>] [--mpi=<num>]
+    mgescan dna <genome_dir> [--output=<data_dir>] [--mpi=<num>]
     mgescan (-h | --help)
     mgescan --version
 ```
@@ -62,14 +72,18 @@ How to cite MGEScan on Galaxy [here]
 References
 -------------------------------------------------------------------------------
 
-1. M. Rho, S. Schaack, X. Gao, S. Kim, M. Lynch and H. Tang (2010), LTR
+1. H. Lee, M. Lee, W. M. Ismail, M. Rho, G. C. Fox, S. Oh, H. Tang (2016), MGEScan: 
+   a Galaxy-based system for identifying retrotransposons in genomes, Bioinformatics, 
+   32(16): 2502-2504. 
+
+2. M. Rho, S. Schaack, X. Gao, S. Kim, M. Lynch and H. Tang (2010), LTR
    retroelements in the genome of Daphnia pulex, BMC Genomics, 11:425. Pubmed. 
 
-2. M. Rho and H. Tang (2009), MGEScan-nonLTR: computational identification and
+3. M. Rho and H. Tang (2009), MGEScan-nonLTR: computational identification and
    classification of Non-LTR retrotransposons in eukaryotic genomes. Nucleic Acid
    Res, 37(21):e143. Free fulltext at NAR online 
 
-3. M. Rho, J. H. Choi, S. Kim, M. Lynch and H. Tang (2007), De novo
+4. M. Rho, J. H. Choi, S. Kim, M. Lynch and H. Tang (2007), De novo
    identification of LTR retrotransposons in eukaryotic genomes. BMC Genomics,
    8:90. Pubmed. 
 
