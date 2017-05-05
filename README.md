@@ -53,6 +53,9 @@ python setup.py install
 
 Command Line Tool (mgescan)
 -------------------------------------------------------------------------------
+**Note: Check the following before running MGEScan**
+1. Make sure the environment variables (mentioned above) are exported every time before you run MGEScan. 
+2. Make sure the Python virtual environment for MGEScan is activated every time before you run MGEScan. 
 
 ```sh
 Usage:
