@@ -40,9 +40,7 @@ trf --version
 blastn -version
 ```
 
-Optional Prerequisites
--------------------------------------------------------------------------------
-
+##### Optional Prerequisites
 * Open MPI v2.1.0 (If you intend to use the MPI feature of MGEScan) - Note: Make sure that Open MPI binaries are available in $PATH.
 ```sh
 mpicc --version
@@ -85,8 +83,11 @@ python setup.py install
 Running MGEScan (command-line)
 -------------------------------------------------------------------------------
 **Important: Check the following before running MGEScan**
-1. Make sure the environment variables (mentioned above) are exported every time before you run MGEScan. 
+1. Make sure the environment variables (mentioned above) are exported every time before you run MGEScan. You can add the export commands in $HOME/.bash_profile (for bash shell) to have them automatically exported during login. 
 2. Make sure the Python virtual environment for MGEScan is activated every time before you run MGEScan. 
+```sh
+source $MGESCAN_VENV/bin/activate
+```
 
 ```sh
 Usage:
@@ -97,6 +98,10 @@ Usage:
     mgescan (-h | --help)
     mgescan --version
 ```
+
+Running MGEScan (Galaxy tool)
+-------------------------------------------------------------------------------
+(To do)
 
 Citation
 -------------------------------------------------------------------------------

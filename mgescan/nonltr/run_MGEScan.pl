@@ -32,7 +32,6 @@ $debug = $ENV{'MGESCAN_DEBUG'};
 $host_file = "";
 $hf_option = "";
 $host_file = $ENV{'MGESCAN_HOME'}."/host_file" if -f $ENV{'MGESCAN_HOME'}."/host_file";
-$host_file = $ENV{'MGESCAN_SRC'}."/host_file" if -f $ENV{'MGESCAN_SRC'}."/host_file";
 
 print "\n\n";
 GetOptions(

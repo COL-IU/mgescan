@@ -53,7 +53,6 @@ $debug = $ENV{'MGESCAN_DEBUG'};
 $host_file = "";
 $hf_option = "";
 $host_file = $ENV{'MGESCAN_HOME'}."/host_file" if -f $ENV{'MGESCAN_HOME'}."/host_file";
-$host_file = $ENV{'MGESCAN_SRC'}."/host_file" if -f $ENV{'MGESCAN_SRC'}."/host_file";
 
 ###################################################
 # HMM for domain
@@ -217,7 +216,7 @@ sub call_find_ltr_for_each_chr{   #$genome_dir, $main_dir, $ltr_dir, $ltr_data_d
 		$hf_option = "-hostfile ". $host_file . " " if ($host_file ne "");
 		my $mpi_option = $hf_option."-mca btl ^openib"; # ignore finding infiniteband
 		my $prg_name = "ltr";
-		my $command = "mpirun -x MGESCAN_SRC=".$ENV{'MGESCAN_SRC'}." -n ".$nmpi." ".$mpi_option." ".$mpi_program." --prg ".$prg_name." --genome ".$_[0]." --data ".$_[3]." --hmmerv ".$hmmerv;
+		my $command = "mpirun -x MGESCAN_HOME=".$ENV{'MGESCAN_HOME'}." -n ".$nmpi." ".$mpi_option." ".$mpi_program." --prg ".$prg_name." --genome ".$_[0]." --data ".$_[3]." --hmmerv ".$hmmerv;
 		# mpirun -n 1 -mca btl ^openib /nfs/nfs4/home/lee212/github/mgescan/mgescan/ltr/../mpi_mgescan --prg ltr --genome /scratch/lee212/test-results/mgescan2/ltr/dmelanogaster/genome/ --data /scratch/lee212/test-results/mgescan2/ltr/dmelanogaster/ltr/ltr/ --hmmerv 3
 		#
 		system($command);		
