@@ -5,19 +5,48 @@ A probabilistic approach for *de novo* identification and classification of mobi
 
 Prerequisites
 -------------------------------------------------------------------------------
+The following are required for installing and running MGEScan. The version numbers specified are the versions used for testing the latest release. Versions other than these may work but not guaranteed to give the same results. Before proceeding to installation, please make sure that the binaries for the following software are available in $PATH by running the commands given below. 
 
 * git v2.0.0
+```sh
+git --version
+```
 * python v2.7.13
+```sh
+python --version
+```
 * virtualenv v15.1.0
+```sh
+virtualenv --version
+```
 * perl v5.10.1
+```sh
+perl --version
+```
 * HMMER v3.1b1
+```sh
+hmmsearch -h
+```
 * EMBOSS v6.6.0
+```sh
+transeq --version
+```
 * Tandem Repeats Finder v4.07b
+```sh
+trf --version
+```
 * NCBI BLAST+ v2.2.28
+```sh
+blastn -version
+```
 
 Optional Prerequisites
 -------------------------------------------------------------------------------
 
+* Open MPI v2.1.0 (If you intend to use the MPI feature of MGEScan) - Note: Make sure that Open MPI binaries are available in $PATH.
+```sh
+mpicc --version
+```
 * Galaxy v17.01 (If you intend to use Galaxy platform to run MGEScan)
 * RepeatMasker v4.0.5 (If you indend to use RepeatMasker in the preprocessing step of MGEScan-LTR)
 
@@ -51,9 +80,9 @@ cd mgescan
 python setup.py install
 ```
 
-Command Line Tool (mgescan)
+Running MGEScan (command-line)
 -------------------------------------------------------------------------------
-**Note: Check the following before running MGEScan**
+**Important: Check the following before running MGEScan**
 1. Make sure the environment variables (mentioned above) are exported every time before you run MGEScan. 
 2. Make sure the Python virtual environment for MGEScan is activated every time before you run MGEScan. 
 
