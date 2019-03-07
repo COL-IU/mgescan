@@ -140,12 +140,12 @@ sub merge_thmm{
 							$te_name = "R2";
 						}
 
-						print OUT $name."\t".$temp[0]."\t".$end."\t".eval($end-$temp[0])."\t".$te_name."\n";
+                                                # print OUT $name."\t".$temp[0]."\t".$end."\t".eval($end-$temp[0])."\t".$te_name."\n";
 
 						my $seq_file = $_[1].$te_name."_full";
 						# e.g. L1_full for each sequence
 						open OUT1, ">>$seq_file";
-						print OUT1 ">".$name."_".$temp[0]."\n";
+                                                # print OUT1 ">".$name."_".$temp[0]."\n";
 
 						my $chr_file = $_[4].$name;    
 						my ($genome, $head);
@@ -169,6 +169,8 @@ sub merge_thmm{
 							#$end_pos = $end;
 
 						}
+                                                print OUT $name."\t".$start_pos."\t".$end_pos."\t".eval($end_pos-$start_pos+1)."\t".$te_name."\n";
+                                                print OUT1 ">".$name."_".$start_pos."\n";
 						print OUT1 substr($genome, $start_pos, eval($end_pos-$start_pos+1))."\n";
 						close(OUT1);
 					}elsif ($count==1){                                      #fragmented elements
