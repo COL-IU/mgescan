@@ -5,7 +5,7 @@ A probabilistic approach for *de novo* identification and classification of mobi
 
 Prerequisites
 -------------------------------------------------------------------------------
-The following are required for installing and running MGEScan. The version numbers specified are the versions used for testing the latest release. Versions other than these may work but not guaranteed to give the same results. Before proceeding to installation, please make sure that the binaries for the following software are available in $PATH by running the commands given below. 
+The following are required for installing and running MGEScan. The version numbers specified are the versions used for testing the latest release. Versions other than these may work but not guaranteed to give the same results. MGEScan is tested in Linux environment (Red Hat Enterprise Linux Server release 6.10 - Santiago). There has been issues reported in running the program in a Mac OS. Before proceeding to installation, please make sure that the binaries for the following software are available in $PATH by running the commands given below. 
 
 * git v2.0.0
 ```sh
